@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SHA-256 Hash Generator</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+        
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .container {
+            background-color: white;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            min-height: 100px;
+            margin-bottom: 15px;
+            font-family: monospace;
+            resize: vertical;
+        }
+        
+        button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+        
+        button:hover {
+            background-color: #2980b9;
+        }
+        
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-radius: 4px;
+            word-break: break-all;
+            font-family: monospace;
+        }
+        
+        .label {
+            font-weight: bold;
+            margin-bottom: 5px;
+            display: block;
+            color: #2c3e50;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>SHA-256 Hash Generator</h1>
+        
+        <div>
+            <label class="label" for="inputText">Enter text to hash:</label>
+            <textarea id="inputText" placeholder="Type or paste your text here..."></textarea>
+        </div>
+        
+        <button onclick="generateHash()">Generate SHA-256 Hash</button>
+        
+        <div class="result" id="hashResult" style="display: none;">
+            <label class="label">SHA-256 Hash:</label>
+            <div id="hashOutput"></div>
+        </div>
+    </div>
+
+    <script>
+        async function generateHash() {
+            const inputText = document.getElementById('inputText').value;
+            
+            if (!inputText.trim()) {
+                alert('Please enter some text to hash');
+                return;
+            }
+            
+            // Encode the input text as UTF-8
+            const encoder = new TextEncoder();
+            const data = encoder.encode(inputText);
+            
+            // Calculate the SHA-256 hash
+            const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+            
+            // Convert the hash to a hexadecimal string
+            const hashArray = Array.from(new Uint8Array(hashBuffer));
+            const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+            
+            // Display the result
+            document.getElementById('hashOutput').textContent = hashHex;
+            document.getElementById('hashResult').style.display = 'block';
+        }
+    </script>
+</body>
+</html>
